@@ -1,19 +1,45 @@
+using RandomUserGenerator.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Enable CORS for all origins (or specify a specific URL in production)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddScoped<UserService>(); // Register UserService
+builder.Services.AddHttpClient(); // Register HttpClient for future use
+
+// Register Swagger services
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(); // Add Swagger documentation
+
 var app = builder.Build();
+
+app.UseCors("AllowAllOrigins"); // Enable CORS globally
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // Enable Swagger UI
+    app.UseSwagger(); // Enable Swagger UI
+    app.UseSwaggerUI(); // Provide an interactive Swagger UI
 }
 
 // app.UseHttpsRedirection();
 
+// Example WeatherForecast endpoint for testing
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -32,6 +58,9 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+// Add the actual users API
+app.MapControllers();
 
 app.Run();
 

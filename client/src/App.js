@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+  const [weatherData, setWeatherData] = useState([]);
+
+  useEffect(() => {
+    // Fetch weather data from the .NET server
+    fetch('http://localhost:5199/weatherforecast')
+      .then(response => response.json())
+      .then(data => setWeatherData(data))
+      .catch(error => console.error('Error fetching weather data:', error));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Weather Forecast</h1>
+      <ul>
+        {weatherData.map((forecast, index) => (
+          <li key={index}>
+            <strong>{forecast.date}:</strong> {forecast.temperatureC}°C - {forecast.summary}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
