@@ -4,10 +4,16 @@ import { User } from '../interfaces/User'; // Import the User interface
 const API_BASE_URL = 'http://localhost:5199/api/Users';
 
 
-// Function to fetch all users
-export const getUsers = async (): Promise<User[]> => {
+// Function to fetch users with pagination
+export const getUsers = async (page: number = 1, pageSize: number = 10): Promise<User[]> => {
   try {
-    const response = await axios.get(API_BASE_URL);
+    // Make a GET request to fetch users with page and pageSize as query parameters
+    const response = await axios.get(API_BASE_URL, {
+      params: {
+        page,      // Pass page number
+        pageSize   // Pass page size
+      }
+    });
     return response.data; // Return the user data
   } catch (error) {
     console.error('Error fetching users:', error);
