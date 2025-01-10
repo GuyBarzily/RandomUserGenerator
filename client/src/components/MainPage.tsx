@@ -34,9 +34,10 @@ const MainPage: React.FC = () => {
       if (searchQuery) {
         // Search users if search query is present
         try {
+          setLoading(false); // Set loading to false once data is fetched
+
           const filteredUsers = await searchUsers(searchQuery);
           setUsers(filteredUsers); // Set filtered users from search
-          setLoading(false); // Set loading to false once data is fetched
         } catch (error) {
           console.error('Error fetching users by query:', error);
         }
@@ -103,8 +104,8 @@ const MainPage: React.FC = () => {
       <div className="user-cards-container">
         {users.map((user, index) => (
           <Link
-            key={index}
-            to={`/user/${user.firstName.toLowerCase()}-${user.lastName.toLowerCase()}`}
+            key={user.id}
+            to={`/user/${user.id}`}
           >
             <UserCard user={user} />
           </Link>

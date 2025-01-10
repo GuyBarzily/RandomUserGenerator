@@ -1,0 +1,48 @@
+/* Add these styles to your CSS file, e.g., UserPage.css */
+.UserPage {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.user-details {
+    text-align: center;
+}
+
+.user-details img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-top: 20px;
+}
+
+.back-button-container {
+    margin-bottom: 20px;
+}
+
+.back-button {
+    background-color: #4CAF50;
+    /* Green background */
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.back-button i {
+    margin-right: 10px;
+    /* Space between icon and text */
+}
+
+.back-button:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+.error-message {
+    color: red;
+    font-size: 18px;
+}

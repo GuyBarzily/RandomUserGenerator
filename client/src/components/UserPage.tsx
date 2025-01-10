@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { User } from '../interfaces/User'; // Import the User interface
-import { getUserByUsername } from '../services/UserService'; // Import the service function
+import { useParams, useNavigate } from 'react-router-dom'; // Use useNavigate in v6
+import { User } from '../interfaces/User';
+import { getUserById } from '../services/UserService';
+import 'font-awesome/css/font-awesome.min.css'; // Import Font Awesome styles
+import '../Styles/UserPage.css'; // Adjust the path to where your CSS file is located
+
 
 const UserPage: React.FC = () => {
-    const { username } = useParams<{ username: string }>(); // Typing the 'username' parameter
-    const [user, setUser] = useState<User | null>(null); // State to hold the user object or null
-    const [error, setError] = useState<string | null>(null); // State to handle errors
+    const { id } = useParams<{ id: string }>();
+    const [user, setUser] = useState<User | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
     useEffect(() => {
-        if (!username) {
-            setError('Username not found.');
+        if (!id) {
+            setError('User ID not found.');
             return;
         }
 
-        // Reset error state when the username changes
         setError(null);
 
-        // Fetch user details based on the username from the URL
-        getUserByUsername(username)
+        getUserById(id)
             .then((data) => {
-                setUser(data); // Set the user data on success
+                setUser(data);
             })
             .catch((err) => {
-                setError(err.message); // Set the error message on failure
+                setError(err.message);
             });
-    }, [username]);  // Re-fetch if the username changes
+    }, [id]);
 
-    if (!user && !error) return <div>Loading...</div>; // Handle loading state
+    if (!user && !error) return <div>Loading...</div>;
 
     return (
         <div className="UserPage">
@@ -37,16 +39,27 @@ const UserPage: React.FC = () => {
                 </div>
             ) : (
                 <>
-                    <h1>{user?.firstName} {user?.lastName}</h1>
-                    <img src={user?.profilePicture} alt={`${user?.firstName} ${user?.lastName}`} />
-                    <p>Email: {user?.email}</p>
-                    <p>Phone: {user?.phone}</p>
-                    <p>Address: {user?.address}</p>
-                    <p>Date of Birth: {user?.dateOfBirth}</p>
+                    <div className="back-button-container">
+                        <button
+                            className="back-button"
+                            onClick={() => navigate(-1)} // Use navigate(-1) to go back
+                        >
+                            <i className="fa fa-arrow-left" aria-hidden="true"></i> Back
+                        </button>
+                    </div>
+
+                    <div className="user-details">
+                        <h1>{user?.firstName} {user?.lastName}</h1>
+                        <img src={user?.profilePicture} alt={`${user?.firstName} ${user?.lastName}`} />
+                        <p>Email: {user?.email}</p>
+                        <p>Phone: {user?.phone}</p>
+                        <p>Address: {user?.address}</p>
+                        <p>Date of Birth: {user?.dateOfBirth}</p>
+                    </div>
                 </>
             )}
         </div>
     );
-}
+};
 
 export default UserPage;

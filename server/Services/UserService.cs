@@ -68,22 +68,19 @@ namespace RandomUserGenerator.Services
 
 
         // Fetch a specific user by ID (hardcoded for now, modify as per actual requirement)
-        public Task<User> GetUserByIdAsync(Guid id)
-        {
-            var user = new User
+            public async Task<User> GetUserByIdAsync(Guid id)
             {
-                Id = id,
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com",
-                DateOfBirth = new DateTime(1985, 5, 15),
-                Phone = "123-456-7890",
-                Address = "123 Main St, Springfield, IL",
-                ProfilePicture = "https://randomuser.me/api/portraits/men/1.jpg"
-            };
+                var user = await _context.Users.FindAsync(id);
 
-            return Task.FromResult(user);
-        }
+                // Return the user if found, otherwise throw an exception or return null (depending on your requirements)
+                if (user == null)
+                {
+                    throw new KeyNotFoundException($"User with Id {id} was not found.");
+                }
+
+                return user;
+            }
+
 
         public async Task<List<User>> SearchUsersAsync(string query)
         {

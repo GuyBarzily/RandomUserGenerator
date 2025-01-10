@@ -43,3 +43,13 @@ export const searchUsers = async (query: string): Promise<User[]> => {
   }
 };
 
+export const getUserById = async (id: string): Promise<User> => {
+  try {
+      const response = await axios.get(`${API_BASE_URL}/${id}`); // Update API endpoint accordingly
+      return response.data;
+  } catch (error) {
+      throw new Error('Failed to fetch user by ID.');
+  }
+};
+
+
