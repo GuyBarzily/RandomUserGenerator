@@ -22,10 +22,24 @@ export const getUsers = async (page: number = 1, pageSize: number = 10): Promise
 };
 
 export const getUserByUsername = async (username: string): Promise<User> => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/${username}`);
-        return response.data; // Return the user data from the response
-    } catch (error) {
-        throw new Error('Error fetching user details');
-    }
+  try {
+    const response = await axios.get(`${API_BASE_URL}/search?username=${username}`);
+    return response.data; // Return the user data from the response
+  } catch (error) {
+    console.error('Error fetching user by username:', error);
+    throw new Error('Error fetching user details');
+  }
 };
+
+export const searchUsers = async (query: string): Promise<User[]> => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/search`, {
+      params: { query }, // Send the search query as a parameter
+    });
+    return response.data; // Return the filtered list of users
+  } catch (error) {
+    console.error('Error searching for users:', error);
+    throw new Error('Error searching for users');
+  }
+};
+
