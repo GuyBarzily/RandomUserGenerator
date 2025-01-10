@@ -1,7 +1,10 @@
-namespace RandomUserGenerator.Models
-{
+using System;
+using System.ComponentModel.DataAnnotations;
+
+
     public class User
     {
+        [Key]
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -10,5 +13,7 @@ namespace RandomUserGenerator.Models
         public string Phone { get; set; }
         public string Address { get; set; }
         public string ProfilePicture { get; set; }
+        public DateTime CachedAt { get; set; } // Timestamp for cache expiration
+
     }
-}
+

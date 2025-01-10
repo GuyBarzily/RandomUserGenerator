@@ -1,7 +1,10 @@
 using RandomUserGenerator.Services;
+using RandomUserGenerator.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins",
         policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=RandomUserDb.sqlite"));
+
+
 
 // Add services to the container.
 builder.Services.AddControllers();
